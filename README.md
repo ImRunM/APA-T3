@@ -1,6 +1,6 @@
 # Tercera tarea de APA: Multiplicaciones de vectores y ortogonalidad
 
-## Nom i cognoms
+## Imelda Run Montes Martín
 
 El fichero `algebra/vectores.py` incluye la definición de la clase `Vector` con los
 métodos desarrollados en clase, que incluyen la construcción, representación y
@@ -76,11 +76,53 @@ Inserte a continuación una captura de pantalla que muestre el resultado de ejec
 fichero `algebra/vectores.py` con la opción *verbosa*, de manera que se muestre el
 resultado de la ejecución de los tests unitarios.
 
+![alt text](image-2.png)
+![alt text](image.png)
+
 #### Código desarrollado
 
 Inserte a continuación el código de los métodos desarrollados en esta tarea, usando los
 comandos necesarios para que se realice el realce sintáctico en Python del mismo (no
 vale insertar una imagen o una captura de pantalla, debe hacerse en formato *markdown*).
+
+```Python
+def __mul__(self, other):
+            """
+            Multiplicación del vector por un escalar o producto de Hadamard con otro vector.
+            """
+
+            if isinstance(other, (int, float, complex)):
+                return Vector(uno * other for uno in self)
+            
+            else:
+                return Vector(uno * otro for uno, otro in zip(self, other))
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+    
+    def __matmul__(self, other):
+        """
+        Producto escalar (producto punto) entre dos vectores.
+        """
+        return sum(uno * otro for uno, otro in zip(self, other))
+    
+    def __floordiv__(self, other):
+        """
+        Devuelve la componente tangencial (proyección) de este vector sobre otro vector.
+        """
+        escalar = (self @ other) / sum(x * x for x in other)
+        return Vector(escalar * x for x in other)
+    
+    def __mod__(self, other):
+        """
+        Devuelve la componente normal (perpendicular) de este vector respecto a otro vector.
+        """
+        return self - (self // other)
+
+  if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+```
 
 #### Subida del resultado al repositorio GitHub y *pull-request*
 
